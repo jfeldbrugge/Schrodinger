@@ -34,7 +34,7 @@
 <p>with the initial condition <span class="math inline">\(\psi(\boldsymbol{x},t=0) = \psi_0(\boldsymbol{x})\)</span>. The probability density for a particle to be localized at <span class="math inline">\(\boldsymbol{x}\)</span> at time <span class="math inline">\(t\)</span> is given by the square <span class="math inline">\(|\psi(\boldsymbol{x},t)|^2\)</span>.</p>
 <p>I will here show how the Schrödinger equation can be numerically solved using the Suzuki-Trotter method, following <a href="https://www.sciencedirect.com/science/article/abs/pii/0167797787900025"> De Raedt (1987)</a>, <a href="https://iopscience.iop.org/article/10.1088/0305-4470/23/24/019"> Huyghebaert and De Raedt (1990)</a>, <a href="https://aip.scitation.org/doi/abs/10.1063/1.168483"> De Raedt and Michielsen (1994)</a>, and <a href="https://www.worldscientific.com/doi/abs/10.1142/9789812830050_0004"> De Raedt (1996)</a>.<br />
 Implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 method, fourth-order in the spatial derivatives, can be downloaded from the git repository</p>
-<pre><code>git clone https://github.com/jfeldbrugge/Picard_Lefschetz_Integrator.git</code></pre>
+<pre><code>git clone https://github.com/jfeldbrugge/Schrodinger.git</code></pre>
 <p>To run the code, go to the directory <strong>Schrodinger_1D</strong> or <strong>Schrodinger_2D</strong> and run</p>
 <pre><code>make</code></pre>
 <p>The results are stored in <strong>output.bin</strong> and can be visualized with the Mathematica notebook <strong>Plot.nb</strong>.</p>
