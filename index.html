@@ -25,7 +25,7 @@
 <h1 class="title">Quantum mechanics</h1>
 <p class="author">Job Feldbrugge</p>
 </header>
-<p>Quantum mechanics is a fundamental theory in physics that provides a description of the physical properties of nature at the scale of atoms and subatomic particles. A quantum state can be described in terms of a <em>wave function</em> <span class="math inline">\(|\psi \rangle\)</span>. The time evolution of a non-relativistic quantum system is described by <em>time-dependent Schrödinger equation</em></p>
+<p>Quantum mechanics is a fundamental theory in physics that describes the physical properties of nature at the scale of atoms and subatomic particles. A quantum state can be described in terms of a <em>wave function</em> <span class="math inline">\(|\psi \rangle\)</span>. The time evolution of a non-relativistic quantum system is described by <em>time-dependent Schrödinger equation</em></p>
 <p><span class="math display">\[i \hbar \frac{\partial }{\partial t} |\psi\rangle = \hat{H} |\psi\rangle.\]</span></p>
 <p>For a particle with mass <span class="math inline">\(m\)</span> in a potential <span class="math inline">\(V(\boldsymbol{x})\)</span>, the Hamiltonian operator assumes the simple form</p>
 <p><span class="math display">\[\hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{\boldsymbol{x}}),\]</span></p>
@@ -33,7 +33,7 @@
 <p><span class="math display">\[i\hbar \frac{\partial \psi(\boldsymbol{x},t)}{\partial t} = \left[-\frac{1}{2m} \nabla_{\boldsymbol{x}}^2 + V(\boldsymbol{x}) \right]\psi(\boldsymbol{x},t),\]</span></p>
 <p>with the initial condition <span class="math inline">\(\psi(\boldsymbol{x},t=0) = \psi_0(\boldsymbol{x})\)</span>. The probability density for a particle to be localized at <span class="math inline">\(\boldsymbol{x}\)</span> at time <span class="math inline">\(t\)</span> is given by the square <span class="math inline">\(|\psi(\boldsymbol{x},t)|^2\)</span>.</p>
 <p>I will here show how the Schrödinger equation can be numerically solved using the Suzuki-Trotter method, following <a href="https://www.sciencedirect.com/science/article/abs/pii/0167797787900025"> De Raedt (1987)</a>, <a href="https://iopscience.iop.org/article/10.1088/0305-4470/23/24/019"> Huyghebaert and De Raedt (1990)</a>, <a href="https://aip.scitation.org/doi/abs/10.1063/1.168483"> De Raedt and Michielsen (1994)</a>, and <a href="https://www.worldscientific.com/doi/abs/10.1142/9789812830050_0004"> De Raedt (1996)</a>.<br />
-An implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 method, fourth order in the spatial derivatives, can be downloaded from the git repository</p>
+Implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 method, fourth-order in the spatial derivatives, can be downloaded from the git repository</p>
 <pre><code>git clone https://github.com/jfeldbrugge/Picard_Lefschetz_Integrator.git</code></pre>
 <p>To run the code, go to the directory <strong>Schrodinger_1D</strong> or <strong>Schrodinger_2D</strong> and run</p>
 <pre><code>make</code></pre>
@@ -42,19 +42,19 @@ An implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 metho
 <p>The Schrödinger equation with a time-independent potential is solved by the exponentiation of the Hamiltonian operator</p>
 <p><span class="math display">\[ | \psi (t) \rangle = e^{-i t \hat{H}/ \hbar}|\psi(t=0)\rangle.\]</span></p>
 <p>The time-evolution operator</p>
-<p><span class="math display">\[U(t) =e^{-i t \hat{H}/ \hbar} = \sum_{n=0}^\infty \left(\frac{-i t }{ \hbar}\right)^n  \frac{\hat{H}^n}{n!}\]</span></p>
+<p><span class="math display">\[U(t) =e^{-i t \hat{H}/ \hbar} = \sum_{n=0}^\infty \left(\frac{-i t }{ \hbar}\right)^n \frac{\hat{H}^n}{n!}\]</span></p>
 <p>is unitarity, enforcing conservation of probability.</p>
-<p>In the Suzuki-Trotter method, we discretize the wave function and approximate the evolution operator with the Trotter formula. We for simplicity describe the method for a one-dimensional particle second order in the spatial derivative. The method straighforwardly generalized to higher dimensional models. We represent the continuous wave function <span class="math inline">\(\psi\)</span> by its values <span class="math inline">\(\{\Psi_i\}\)</span> on a regular lattice <span class="math inline">\(x_i=x_0 + \delta i\)</span> with lattice spacing <span class="math inline">\(\delta\)</span>. If the lattice consisting of <span class="math inline">\(d\)</span> lattice points, the Hamiltonian operator <span class="math inline">\(\hat{H}\)</span> is represented by a <span class="math inline">\(d\times d\)</span> Hermitian matrix. The potential term in the Hamiltonian operator contribute to the diagonal elements of the Hamiltonian matrix. The potential term in the Hamiltonian operator contribute, using a finite difference scheme, to band near the diagional. For example, using the second order approximation of the second derivative</p>
+<p>In the Suzuki-Trotter method, we discretize the wave function and approximate the evolution operator with the Trotter formula. We for simplicity describe the method for a one-dimensional particle second order in the spatial derivative. The method can be straightforwardly generalized to higher-dimensional models. We represent the continuous wave function <span class="math inline">\(\psi\)</span> by its values <span class="math inline">\(\{\Psi_i\}\)</span> on a regular lattice <span class="math inline">\(x_i=x_0 + \delta i\)</span> with lattice spacing <span class="math inline">\(\delta\)</span>. If the lattice consisting of <span class="math inline">\(d\)</span> lattice points, the Hamiltonian operator <span class="math inline">\(\hat{H}\)</span> is represented by a <span class="math inline">\(d\times d\)</span> Hermitian matrix. The potential term in the Hamiltonian operator contributes to the diagonal elements of the Hamiltonian matrix. The potential term in the Hamiltonian operator contributes, using a finite difference scheme, to a band near the diagonal. For example, using the second-order approximation of the second derivative</p>
 <p><span class="math display">\[ \frac{\partial^2}{\partial x^2} f \mapsto \frac{f(x - \delta ) - 2 f(x) + f(x+\delta)}{\delta^2},\]</span></p>
-<p>the Hamiltonian matrix takes a tri-diagional form</p>
+<p>the Hamiltonian matrix takes a tri-diagonal form</p>
 <p><span class="math display">\[\hat{H} = \begin{pmatrix} 
-V(x_0) + 2 \delta^{-2} &amp; -\delta^{-2} &amp;  \\  
--\delta^{-2}  &amp;  V(x_1) + 2 \delta^{-2} &amp; \delta^{-2}\\
-&amp;- \delta^{-2}  &amp;  V(x_2) + 2 \delta^{-2} &amp;- \delta^{-2}\\
+V(x_0) + 2 \delta^{-2} &amp; -\delta^{-2} &amp; \\  
+-\delta^{-2} &amp; V(x_1) + 2 \delta^{-2} &amp; \delta^{-2}\\
+&amp;- \delta^{-2} &amp; V(x_2) + 2 \delta^{-2} &amp;- \delta^{-2}\\
 &amp; &amp; \ddots &amp;  
 \end{pmatrix}.\]</span></p>
-<p>Higher order central finite difference stencils differential operator <span class="math inline">\(\frac{\partial^2}{\partial x^2}\)</span> lead to more general band matrices.</p>
-<p>Matrix exponentiations of large matrices are generally expensive. However, as the matrix <span class="math inline">\(-i\hat{H}\)</span> is a sparse Hermition matrix, we can efficiently evaluate the exponentiation by decomposing the matrix in <span class="math inline">\(2\times 2\)</span> blocks</p>
+<p>Higher-order central finite difference stencils differential operator <span class="math inline">\(\frac{\partial^2}{\partial x^2}\)</span> lead to more general band matrices.</p>
+<p>Matrix exponentiations of large matrices are generally expensive. However, as the matrix <span class="math inline">\(-i\hat{H}\)</span> is a sparse Hermitian matrix, we can efficiently evaluate the exponentiation by decomposing the matrix in <span class="math inline">\(2\times 2\)</span> blocks</p>
 <p><span class="math display">\[\hat{H} = K_1 + K_2 + K_3\]</span></p>
 <p>with the diagonal matrix <span class="math inline">\(K_1 = \text{diag}(V(x_0) + 2 \delta^{-2}, V(x_1) + 2 \delta^{-2}, \dots, V(x_{d-1}) + 2 \delta^{-2})\)</span> and the block matrices</p>
 <p><span class="math display">\[K_2 = \begin{pmatrix}
@@ -62,7 +62,7 @@ V(x_0) + 2 \delta^{-2} &amp; -\delta^{-2} &amp;  \\
 -\delta^{-2} &amp; 0 \\
 &amp; &amp;0 &amp; - \delta^{-2}\\
 &amp; &amp;-\delta^{-2} &amp; 0 \\
-&amp; &amp; &amp;  &amp; \ddots
+&amp; &amp; &amp; &amp; \ddots
 \end{pmatrix},\ 
 K_3 = \begin{pmatrix}
 0 &amp;\\
@@ -70,14 +70,14 @@ K_3 = \begin{pmatrix}
 &amp; -\delta^{-2} &amp; 0 \\
 &amp; &amp; &amp;0 &amp; - \delta^{-2}\\
 &amp; &amp; &amp;-\delta^{-2} &amp; 0 \\
-&amp; &amp; &amp; &amp;  &amp; \ddots
+&amp; &amp; &amp; &amp; &amp; \ddots
 \end{pmatrix}.\]</span></p>
-<p>Note that we generally need one block matrices <span class="math inline">\(K_i\)</span> for every diagional band in the Hamiltonian matrix.</p>
+<p>Note that we generally need one block matrices <span class="math inline">\(K_i\)</span> for every diagonal band in the Hamiltonian matrix.</p>
 <p>Writing the evolution of the wave function as</p>
-<p><span class="math display">\[ |\Psi_i(t)\rangle = e^{-i t \hat{H}/\hbar} |\Psi_i(t=0)\rangle =  \left(e^{-i \Delta t \hat{H}/\hbar}\right)^n |\Psi_i(t=0)\rangle\]</span></p>
-<p>with the small time step <span class="math inline">\(\Delta t = t/n\)</span>, we can approximate the exponentiation using the Trotter formula</p>
+<p><span class="math display">\[ |\Psi_i(t)\rangle = e^{-i t \hat{H}/\hbar} |\Psi_i(t=0)\rangle = \left(e^{-i \Delta t \hat{H}/\hbar}\right)^n |\Psi_i(t=0)\rangle\]</span></p>
+<p>with the small-time step <span class="math inline">\(\Delta t = t/n\)</span>, we can approximate the exponentiation using the Trotter formula</p>
 <p><span class="math display">\[e^{-i \Delta t \hat{H}/\hbar} \approx e^{-i \Delta t K_1 / \hbar}e^{-i \Delta t K_2 / \hbar}e^{-i \Delta t K_3 / \hbar}.\]</span></p>
-<p>Since the exponential of a block diagional matrix is block diagonal, the operation of these three matrices can on the vector <span class="math inline">\(|\Psi_i \rangle\)</span> is easily implemented using the matrices</p>
+<p>Since the exponential of a block diagonal matrix is block diagonal, the operation of these three matrices can on the vector <span class="math inline">\(|\Psi_i \rangle\)</span> is easily implemented using the matrices</p>
 <p><span class="math display">\[\exp\left[-i\Delta t \begin{pmatrix} \alpha_i &amp; 0 \\ 0 &amp; \alpha_{j} \end{pmatrix}\right]\begin{pmatrix}\Psi_i \\ \Psi_{j}\end{pmatrix}=\begin{pmatrix}e^{-i \Delta t\alpha_i}\Psi_i \\ e^{-i \Delta t\alpha_{j}}\Psi_{j}\end{pmatrix} ,
 \]</span></p>
 <p>and</p>
@@ -88,15 +88,15 @@ K_3 = \begin{pmatrix}
 <p>is first order in the time step <span class="math inline">\(\Delta t\)</span> since</p>
 <p><span class="math display">\[\| e^{is (A+B)} - e^{is A}e^{is B}\| \leq \frac{s^2}{2} \| [A,B]\|\,,\]</span></p>
 <p>with the comutator <span class="math inline">\([A,B] = A B - B A\)</span> and the matrix norm <span class="math inline">\(\|A\| = \max_{\|\boldsymbol{v}\|=1} \| X \boldsymbol{v}\|\)</span>. We can improve the accuracy of the approximation by symmetrization</p>
-<p><span class="math display">\[\| e^{i s (A+B)} - e^{i s A/2}e^{is B}e^{is A/2}\| \leq  c s^3 ,\]</span></p>
+<p><span class="math display">\[\| e^{i s (A+B)} - e^{i s A/2}e^{is B}e^{is A/2}\| \leq c s^3 ,\]</span></p>
 <p>for some positive constant <span class="math inline">\(c\)</span>. The corresponding evolution scheme</p>
 <p><span class="math display">\[\Psi \approx U_2(\Delta t)^n \Psi_0\]</span></p>
-<p>with <span class="math inline">\(U_2(\Delta t) = U_1(\Delta t/2)^T U_1(\Delta t/2)\)</span> with the transpose <span class="math inline">\(A^T\)</span>, known as Trotter-Suzuki-2, is second order in the time step <span class="math inline">\(\Delta t\)</span>. The fourth order Trotter-Suzuki-4 scheme</p>
+<p>with <span class="math inline">\(U_2(\Delta t) = U_1(\Delta t/2)^T U_1(\Delta t/2)\)</span> with the transpose <span class="math inline">\(A^T\)</span>, known as Trotter-Suzuki-2, is second order in the time step <span class="math inline">\(\Delta t\)</span>. The fourth-order Trotter-Suzuki-4 scheme</p>
 <p><span class="math display">\[\Psi \approx U_4(\Delta t)^n \Psi_0\]</span></p>
 <p>can be expressed in terms of the Trotter-Suzuki-2 matrix</p>
 <p><span class="math display">\[U_4(\Delta t) = U_2(p\Delta t) U_2(p\Delta t) U_2((1-4p)\Delta t)U_2(p\Delta t) U_2(p\Delta t),\]</span></p>
-<p>with the constant <span class="math inline">\(p=1/(4-4^{1/3})\)</span>. Note that this is not nessesarily the most efficient choice.</p>
-<p>The code corresponding to these notes is an implementation of the Trotter-Suzuki-4 scheme with the fourth order approximation of the spatial derivative</p>
+<p>with the constant <span class="math inline">\(p=1/(4-4^{1/3})\)</span>. Note that this is not necessarily the most efficient choice.</p>
+<p>The code corresponding to these notes is an implementation of the Trotter-Suzuki-4 scheme with the fourth-order approximation of the spatial derivative</p>
 <p><span class="math display">\[ \frac{\partial^2}{\partial x^2} f \mapsto 
 \frac{-\frac{1}{12}f(x - 2 \delta ) + \frac{4}{3}f(x - \delta ) - \frac{5}{2} f(x) + \frac{4}{3}f(x + \delta ) -\frac{1}{12}f(x + 2 \delta )}{\delta^2}.\]</span></p>
 <p>Note that the Trotter-Suzuki is an accurate solution to the Schrödinger equation when the Courant-like condition</p>
@@ -113,7 +113,7 @@ K_3 = \begin{pmatrix}
 Fig.1 - The evolution of a Gaussian wave packet in a harmonic oscillator.
 </figcaption>
 </figure>
-<p>Note that it takes two complete oscillations to return to the original configuration, as the wavefunction is multiplied by one after each completed oscillation. The fact that the system returns to the original configuration is an application of the integrability of the harmonic oscillator. This behavior can clearly been seen in the spacetime plots below.</p>
+<p>Note that it takes two complete oscillations to return to the original configuration, as the wavefunction is multiplied by one after each completed oscillation. The fact that the system returns to the original configuration is an application of the integrability of the harmonic oscillator. This behaviour can be seen in the spacetime plots below.</p>
 <figure>
 <table align="left" width="100%" id="FIG">
 <tr>
@@ -132,8 +132,8 @@ Fig.1 - The evolution of a Gaussian wave packet in a harmonic oscillator.
 Fig.2 - The absolute square <span class="math inline">\(|\psi|^2\)</span>, the real part <span class="math inline">\(\text{Re}[\psi]\)</span>, and the imaginary part <span class="math inline">\(\text{Im}[\psi]\)</span> of the wavefunction in spacetime (left, centre, right).
 </figcaption>
 </figure>
-<h3 id="youngs-double-slit-experiment">Young’s double slit experiment</h3>
-<p>To demonstrate the two-dimensional code, we model Young’s double slit experiment. We start with a Gaussian wave packet moving upwards towards a screen with two slits. The wavefunction interacts with the screen and exhibits the famous interference pattern.</p>
+<h3 id="youngs-double-slit-experiment">Young’s double-slit experiment</h3>
+<p>To demonstrate the two-dimensional code, we model Young’s double-slit experiment. We start with a Gaussian wave packet moving upwards towards a screen with two slits. The wavefunction interacts with the screen and exhibits the famous interference pattern.</p>
 <figure>
 <img src='figures/Young.gif' width=100% />
 <figcaption>
