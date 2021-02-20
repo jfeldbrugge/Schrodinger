@@ -51,7 +51,7 @@ Implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 method, 
 V(x_0) + 2 \delta^{-2} &amp; -\delta^{-2} &amp; \\  
 -\delta^{-2} &amp; V(x_1) + 2 \delta^{-2} &amp; \delta^{-2}\\
 &amp;- \delta^{-2} &amp; V(x_2) + 2 \delta^{-2} &amp;- \delta^{-2}\\
-&amp; &amp; \ddots &amp;  
+&amp; &amp; \ddots &amp; \ddots &amp; \ddots  
 \end{pmatrix}.\]</span></p>
 <p>Higher-order central finite difference stencils differential operator <span class="math inline">\(\frac{\partial^2}{\partial x^2}\)</span> lead to more general band matrices.</p>
 <p>Matrix exponentiations of large matrices are generally expensive. However, as the matrix <span class="math inline">\(-i\hat{H}\)</span> is a sparse Hermitian matrix, we can efficiently evaluate the exponentiation by decomposing the matrix in <span class="math inline">\(2\times 2\)</span> blocks</p>
