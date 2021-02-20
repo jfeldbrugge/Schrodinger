@@ -31,6 +31,8 @@ void U1(vector2d &Phi, const double tau);
 void U2(vector2d &Phi, const double tau);
 void U4(vector2d &Phi, const double tau);
 
+double Ax(const int ii, const int jj);
+double Ay(const int ii, const int jj);
 double V(const double x, const double y);
 
 void Integrate(const vector2d &Phi, vector2d &PhiT);

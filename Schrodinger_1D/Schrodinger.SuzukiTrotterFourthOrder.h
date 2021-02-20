@@ -1,12 +1,3 @@
-// Suzuki-Trotter method to Fourth order in the space-time manifold and proper time.
-const double a1 = -2. / (3. * m * delta * delta);
-const double a2 = 1. / (24. * m * delta * delta);
-
-double diag(double x)
-{
-    return 5. / (4. * m * delta * delta) + V(x);
-}
-
 // Implementation
 void U1(vector1d &Phi, const double tau)
 {
@@ -46,12 +37,12 @@ void ExpA1(vector1d &Phi, const double tau)
 #pragma omp parallel for
     for(int i1 = 0; i1 < L - 2; i1 = i1 + 4)
     {
-        Exp(Phi, tau, -a2, i1, i1 + 2);
+        Exp(Phi, tau / hbar, -a1, i1, i1 + 2);
     }
 #pragma omp parallel for
     for(int i1 = 1; i1 < L - 2; i1 = i1 + 4)
     {
-        Exp(Phi, tau, -a2, i1, i1 + 2);
+        Exp(Phi, tau / hbar, -a1, i1, i1 + 2);
     }
 }
 
@@ -60,12 +51,12 @@ void ExpA2(vector1d &Phi, const double tau)
 #pragma omp parallel for
     for(int i1 = 2; i1 < L - 2; i1 = i1 + 4)
     {
-        Exp(Phi, tau, -a2, i1, i1 + 2);
+        Exp(Phi, tau / hbar, -a1, i1, i1 + 2);
     }
 #pragma omp parallel for
     for(int i1 = 3; i1 < L - 2; i1 = i1 + 4)
     {
-        Exp(Phi, tau, -a2, i1, i1 + 2);
+        Exp(Phi, tau / hbar, -a1, i1, i1 + 2);
     }
 }
 
@@ -74,7 +65,7 @@ void ExpA3(vector1d &Phi, const double tau)
 #pragma omp parallel for
     for(int i1 = 0; i1 < L - 1; i1 = i1 + 2)
     {
-        Exp(Phi, tau, -a1, i1, i1 + 1);
+        Exp(Phi, tau / hbar, -a2, i1, i1 + 1);
     }
 }
 
@@ -83,7 +74,7 @@ void ExpA4(vector1d &Phi, const double tau)
 #pragma omp parallel for
     for(int i1 = 1; i1 < L - 1; i1 = i1 + 2)
     {
-        Exp(Phi, tau, -a1, i1, i1 + 1);
+        Exp(Phi, tau / hbar, -a2, i1, i1 + 1);
     }
 }
 
@@ -92,7 +83,7 @@ void ExpA5(vector1d &Phi, const double tau)
 #pragma omp parallel for
     for( int i = 0; i < L; i++)
     {
-        Phi[i] = exp(-I * tau * diag(delta * i)) * Phi[i];
+        Phi[i] = exp(-I * tau / hbar * diag(delta * i)) * Phi[i];
     }
 }
 

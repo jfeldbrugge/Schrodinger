@@ -30,7 +30,7 @@
 <p>For a particle with mass <span class="math inline">\(m\)</span> in a potential <span class="math inline">\(V(\boldsymbol{x})\)</span>, the Hamiltonian operator assumes the simple form</p>
 <p><span class="math display">\[\hat{H} = \frac{\hat{p}^2}{2m} + V(\hat{\boldsymbol{x}}),\]</span></p>
 <p>in terms of the position and momentum operators <span class="math inline">\(\hat{\boldsymbol{x}}\)</span> and <span class="math inline">\(\hat{\boldsymbol{p}}\)</span>. In the position representation <span class="math inline">\(\psi(\boldsymbol{x}) = \langle \boldsymbol{x} | \psi \rangle\)</span>, the Schrödinger equation assumes the form</p>
-<p><span class="math display">\[i\hbar \frac{\partial \psi(\boldsymbol{x},t)}{\partial t} = \left[-\frac{1}{2m} \nabla_{\boldsymbol{x}}^2 + V(\boldsymbol{x}) \right]\psi(\boldsymbol{x},t),\]</span></p>
+<p><span class="math display">\[i\hbar \frac{\partial \psi(\boldsymbol{x},t)}{\partial t} = \left[-\frac{\hbar^2}{2m} \nabla_{\boldsymbol{x}}^2 + V(\boldsymbol{x}) \right]\psi(\boldsymbol{x},t),\]</span></p>
 <p>with the initial condition <span class="math inline">\(\psi(\boldsymbol{x},t=0) = \psi_0(\boldsymbol{x})\)</span>. The probability density for a particle to be localized at <span class="math inline">\(\boldsymbol{x}\)</span> at time <span class="math inline">\(t\)</span> is given by the square <span class="math inline">\(|\psi(\boldsymbol{x},t)|^2\)</span>.</p>
 <p>I will here show how the Schrödinger equation can be numerically solved using the Suzuki-Trotter method, following <a href="https://www.sciencedirect.com/science/article/abs/pii/0167797787900025"> De Raedt (1987)</a>, <a href="https://iopscience.iop.org/article/10.1088/0305-4470/23/24/019"> Huyghebaert and De Raedt (1990)</a>, <a href="https://aip.scitation.org/doi/abs/10.1063/1.168483"> De Raedt and Michielsen (1994)</a>, and <a href="https://www.worldscientific.com/doi/abs/10.1142/9789812830050_0004"> De Raedt (1996)</a>.<br />
 Implementations in C++ of the one- and two-dimensional Suzuki-Trotter-4 method, fourth-order in the spatial derivatives, can be downloaded from the git repository</p>
@@ -78,10 +78,10 @@ K_3 = \begin{pmatrix}
 <p>with the small-time step <span class="math inline">\(\Delta t = t/n\)</span>, we can approximate the exponentiation using the Trotter formula</p>
 <p><span class="math display">\[e^{-i \Delta t \hat{H}/\hbar} \approx e^{-i \Delta t K_1 / \hbar}e^{-i \Delta t K_2 / \hbar}e^{-i \Delta t K_3 / \hbar}.\]</span></p>
 <p>Since the exponential of a block diagonal matrix is block diagonal, the operation of these three matrices can on the vector <span class="math inline">\(|\Psi_i \rangle\)</span> is easily implemented using the matrices</p>
-<p><span class="math display">\[\exp\left[-i\Delta t \begin{pmatrix} \alpha_i &amp; 0 \\ 0 &amp; \alpha_{j} \end{pmatrix}\right]\begin{pmatrix}\Psi_i \\ \Psi_{j}\end{pmatrix}=\begin{pmatrix}e^{-i \Delta t\alpha_i}\Psi_i \\ e^{-i \Delta t\alpha_{j}}\Psi_{j}\end{pmatrix} ,
+<p><span class="math display">\[\exp\left[-is \begin{pmatrix} \alpha_i &amp; 0 \\ 0 &amp; \alpha_{j} \end{pmatrix}\right]\begin{pmatrix}\Psi_i \\ \Psi_{j}\end{pmatrix}=\begin{pmatrix}e^{-i \alpha_i s}\Psi_i \\ e^{-i \alpha_{j} s}\Psi_{j}\end{pmatrix} ,
 \]</span></p>
 <p>and</p>
-<p><span class="math display">\[\exp\left[-i\Delta t \begin{pmatrix} 0 &amp; \beta \\ \beta^* &amp; 0 \end{pmatrix}\right]\begin{pmatrix}\Psi_i \\ \Psi_{j}\end{pmatrix}=\begin{pmatrix}\cos(|\beta| \Delta t) \Psi_i + \frac{i \beta}{|\beta|} \sin (|\beta| \Delta t) \Psi_j\\ \frac{i \beta^*}{|\beta|} \sin (|\beta| \Delta t) \Psi_i + \cos(|\beta|\Delta t) \Psi_j\end{pmatrix} .
+<p><span class="math display">\[\exp\left[-is \begin{pmatrix} 0 &amp; \beta \\ \beta^* &amp; 0 \end{pmatrix}\right]\begin{pmatrix}\Psi_i \\ \Psi_{j}\end{pmatrix}=\begin{pmatrix}\cos(|\beta| s) \Psi_i + \frac{i \beta}{|\beta|} \sin (|\beta| s) \Psi_j\\ \frac{i \beta^*}{|\beta|} \sin (|\beta| s) \Psi_i + \cos(|\beta|s) \Psi_j\end{pmatrix} .
  \]</span></p>
 <p>The above approximation of the evolution operator is known as the Trotter-Suzuki-1 method</p>
 <p><span class="math display">\[U_1(\Delta t) = e^{-i \Delta t K_1 / \hbar}e^{-i \Delta t K_2 / \hbar}e^{-i \Delta t K_3 / \hbar}\]</span></p>
@@ -97,13 +97,43 @@ K_3 = \begin{pmatrix}
 <p><span class="math display">\[U_4(\Delta t) = U_2(p\Delta t) U_2(p\Delta t) U_2((1-4p)\Delta t)U_2(p\Delta t) U_2(p\Delta t),\]</span></p>
 <p>with the constant <span class="math inline">\(p=1/(4-4^{1/3})\)</span>. Note that this is not necessarily the most efficient choice.</p>
 <p>The code corresponding to these notes is an implementation of the Trotter-Suzuki-4 scheme with the fourth-order approximation of the spatial derivative</p>
+<p><span class="math display">\[ \frac{\partial}{\partial x} f \mapsto 
+\frac{-\frac{1}{12}f(x - 2 \delta ) + \frac{2}{3}f(x - \delta ) - \frac{2}{3} f(x+\delta) + \frac{1}{12}f(x + 2\delta ) }{\delta},\]</span></p>
 <p><span class="math display">\[ \frac{\partial^2}{\partial x^2} f \mapsto 
 \frac{-\frac{1}{12}f(x - 2 \delta ) + \frac{4}{3}f(x - \delta ) - \frac{5}{2} f(x) + \frac{4}{3}f(x + \delta ) -\frac{1}{12}f(x + 2 \delta )}{\delta^2}.\]</span></p>
 <p>Note that the Trotter-Suzuki is an accurate solution to the Schrödinger equation when the Courant-like condition</p>
-<p><span class="math display">\[\frac{\hbar \delta t}{\delta^2} \ll 1.\]</span></p>
+<p><span class="math display">\[\frac{ \hbar \Delta t}{ m\delta^2} \ll 1.\]</span></p>
 <h3 id="harmonic-oscillator">Harmonic oscillator</h3>
+<p>The one-dimensional Hamiltonian operator <span class="math inline">\(\hat{H} = \hat{p}^2/(2m) + V(\hat{x})\)</span>, corresponding to a non-relativistic particle in a potential <span class="math inline">\(V\)</span>, assumes the discrete form</p>
+<p><span class="math display">\[[\hat{H} \Psi]_i = 
+\frac{\hbar^2}{24 m \delta^2} \Psi_{i-2}
+-\frac{2\hbar^2}{3 m \delta^2}\Psi_{i-1}
++\left[\frac{5\hbar^2}{4 m \delta^2} + V(x_i) \right]\Psi_i
+-\frac{2\hbar^2}{3 m \delta^2}\Psi_{i+1}
++\frac{\hbar^2}{24 m \delta^2} \Psi_{i+2}
+\]</span></p>
+<p>using the fourth-order finite difference scheme</p>
+<p><span class="math display">\[ \Psi_i&#39;&#39;=\frac{1}{12 \delta^2}(-\Psi_{i-2} + 16\Psi_{i-1} - 30 \Psi_i +16\Psi_{i+1} -\Psi_{i+2}).\]</span></p>
+<p>In terms of the constants <span class="math inline">\(a_1=\frac{\hbar^2}{24 m \delta^2}, a_2=-\frac{2\hbar^2}{3 m \delta^2}\)</span>, we can decompose the Hamiltonian matrix into five block-diagonal matrices. Two matrices rotating the elements <span class="math inline">\(\Psi_{i}\)</span> and <span class="math inline">\(\Psi_{i+2}\)</span>,</p>
+<p><span class="math display">\[
+\begin{pmatrix} \Psi_i \\ \Psi_{i+2} \end{pmatrix}
+\mapsto
+\exp\left[-\frac{i \Delta t}{\hbar} \begin{pmatrix} 0 &amp; a_1 \\ a_1 &amp; 0 \end{pmatrix}\right]
+\begin{pmatrix} \Psi_i \\ \Psi_{i+2} \end{pmatrix},
+\]</span></p>
+<p>(the first for <span class="math inline">\(i=0,1,4,5,\dots\)</span>, and the second for <span class="math inline">\(i=2,3,6,7,\dots\)</span>), two rotating the elements <span class="math inline">\(\Psi_i\)</span> and <span class="math inline">\(\Psi_{i+1}\)</span>,</p>
+<p><span class="math display">\[
+\begin{pmatrix} \Psi_i \\ \Psi_{i+1} \end{pmatrix}
+\mapsto
+\exp\left[-\frac{i \Delta t}{\hbar} \begin{pmatrix} 0 &amp; a_2 \\ a_2 &amp; 0 \end{pmatrix}\right]
+\begin{pmatrix} \Psi_i \\ \Psi_{i+1} \end{pmatrix},
+\]</span></p>
+<p>(the first for <span class="math inline">\(i=0,2,3,\dots\)</span>, and the second for <span class="math inline">\(i=1,3,5,\dots\)</span>), and one corresponding to the diagonal</p>
+<p><span class="math display">\[
+\Psi_i \mapsto \exp\left[-\frac{i\Delta t}{\hbar}\left( \frac{5 \hbar^2}{4 m \delta^2} + V(x_i)\right)\right]\Psi_i.
+\]</span></p>
 <p>To demonstrate the one-dimensional code, we evolve a Gaussian wave packet</p>
-<p><span class="math display">\[ \psi(t=0) = \frac{1}{(2 \pi \sigma^2)^{1/4}}e^{-\frac{(x-\mu)^2}{4 \sigma^2} + i \hbar (x-\mu)p_0}\]</span></p>
+<p><span class="math display">\[ \psi(t=0) = \frac{1}{(2 \pi \sigma^2)^{1/4}}e^{-\frac{(x-\mu)^2}{4 \sigma^2} + i  (x-\mu)p_0 / \hbar}\]</span></p>
 <p>with the initial mean <span class="math inline">\(\mu=0\)</span>, the spread <span class="math inline">\(\sigma =1\)</span>, and momentum <span class="math inline">\(p_0 = 1\)</span> in an harmonic oscillator with the Hamiltonian operator</p>
 <p><span class="math display">\[\hat{H} = \frac{\hat{p}^2}{2m} + \hat{x}^2\]</span></p>
 <p>with mass <span class="math inline">\(m=1\)</span> in units of the Planck constant <span class="math inline">\(\hbar = 1\)</span>.</p>
@@ -133,6 +163,40 @@ Fig. 2 - The absolute square <span class="math inline">\(|\psi|^2\)</span>, the 
 </figcaption>
 </figure>
 <h3 id="youngs-double-slit-experiment">Young’s double-slit experiment</h3>
+<p>The two-dimensional Hamiltonian operator <span class="math inline">\(\hat{H} = (\hat{\boldsymbol{p}} - e \boldsymbol{A})^2 / (2m) + V(\hat{\boldsymbol{x}})\)</span>, corresponding to a non-relativistic particle with mass <span class="math inline">\(m\)</span>, charge <span class="math inline">\(e\)</span> in an vector potential <span class="math inline">\(\boldsymbol{A}\)</span> in a potential <span class="math inline">\(V\)</span>, can be writen as</p>
+<p><span class="math display">\[
+\begin{align}
+\hat{H}\Psi = &amp;\frac{1}{2m} \bigg[ -\hbar^2\left(\frac{\partial^2 \Psi}{\partial x^2} + \frac{\partial^2 \Psi}{\partial y^2}\right) 
+-ie\hbar\left(A_x\frac{\partial \Psi}{\partial x} +  A_y\frac{\partial \Psi}{\partial y} + \frac{\partial A_x\Psi}{\partial x}+ \frac{\partial A_y\Psi}{\partial y}\right)\bigg]\\
+&amp;+ \left(\frac{e^2(A_x^2+A_y^2)}{2m} + V\right) \Psi,
+\end{align}\]</span></p>
+<p>with <span class="math inline">\(\boldsymbol{A}=(A_x,A_y)\)</span>. This operator assumes the discrete form</p>
+<p><span class="math display">\[
+\begin{align}
+[\hat{H}\Psi]_{i,j} =
+&amp;+\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i-2,j})\right)\Psi_{i-2,j}+  
+\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} - \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i+2,j})\right)\Psi_{i+2,j} \\
+&amp;+\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-2})\right)\Psi_{i,j-2} + 
+ \frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} - \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j+2})\right)\Psi_{i,j+2} \\
+ &amp;-\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i-1,j})\right)\Psi_{i-1,j} - 
+ \frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} - \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i+1,j})\right)\Psi_{i+1,j}\\
+ &amp;-\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-1})\right)\Psi_{i,j-1} - 
+ \frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} - \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j+1})\right)\Psi_{i,j+1} \\
+ &amp;+\left[\frac{1}{2m}\left( \frac{5 \hbar^2}{\delta^2} + e^2(A_{x\ i,j}^2+A_{y\ i,j}^2)\right) + V_{i,j}\right]\Psi_{i,j},
+ \end{align}
+\]</span></p>
+<p>using the fourth-order finite difference scheme</p>
+<p><span class="math display">\[ \Psi_i&#39;=\frac{1}{12 \delta}(-\Psi_{i-2} + 8 \Psi_{i-1} - 8\Psi_{i+1} +\Psi_{i+2}),\]</span> <span class="math display">\[ \Psi_i&#39;&#39;=\frac{1}{12 \delta^2}(-\Psi_{i-2} + 16\Psi_{i-1} - 30 \Psi_i +16\Psi_{i+1} -\Psi_{i+2}).\]</span></p>
+<p>Analogous to the one-dimensional case, we decompose this Hamiltonian matrix in nine block diagonal matrices to evaluate the exponentiation. For convenience we express these matrices in terms of the functions</p>
+<p><span class="math display">\[
+\begin{align}
+a_{1x\ i,j} = &amp;\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i-2,j})\right),\\
+a_{1y\ i,j} = &amp;\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-2})\right),\\
+a_{2x\ i,j} =&amp; -\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i-1,j})\right),\\
+a_{2y\ i,j} =&amp; -\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-1})\right),\\
+\text{diag}_{i,j}=&amp; \frac{1}{2m}\left( \frac{5 \hbar^2}{\delta^2} + e^2(A_{x\ i,j}^2+A_{y\ i,j}^2)\right) + V_{i,j}.
+\end{align}
+\]</span></p>
 <p>To demonstrate the two-dimensional code, we model Young’s double-slit experiment. We start with a Gaussian wave packet moving upwards towards a screen with two slits. The wavefunction interacts with the screen and exhibits the famous interference pattern.</p>
 <figure>
 <img src='figures/Young.gif' width=100% />
