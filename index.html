@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
   <meta name="author" content="Job Feldbrugge" />
-  <title>Quantum mechanics</title>
+  <title>Quantum Mechanics</title>
   <style>
     code{white-space: pre-wrap;}
     span.smallcaps{font-variant: small-caps;}
@@ -22,7 +22,7 @@
 </head>
 <body>
 <header id="title-block-header">
-<h1 class="title">Quantum mechanics</h1>
+<h1 class="title">Quantum Mechanics</h1>
 <p class="author">Job Feldbrugge</p>
 </header>
 <p>Quantum mechanics is a fundamental theory in physics that describes the physical properties of nature at the scale of atoms and subatomic particles. A quantum state can be described in terms of a <em>wave function</em> <span class="math inline">\(|\psi \rangle\)</span>. The time evolution of a non-relativistic quantum system is described by <em>time-dependent Schrödinger equation</em></p>
@@ -194,9 +194,25 @@ a_{1x\ i,j} = &amp;\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hb
 a_{1y\ i,j} = &amp;\frac{1}{24 m}\left( \frac{\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-2})\right),\\
 a_{2x\ i,j} =&amp; -\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{x\ i,j} + A_{x\ i-1,j})\right),\\
 a_{2y\ i,j} =&amp; -\frac{1}{3 m}\left( \frac{2\hbar^2}{\delta^2} + \frac{i e \hbar}{\delta}(A_{y\ i,j} + A_{y\ i,j-1})\right),\\
-\text{diag}_{i,j}=&amp; \frac{1}{2m}\left( \frac{5 \hbar^2}{\delta^2} + e^2(A_{x\ i,j}^2+A_{y\ i,j}^2)\right) + V_{i,j}.
+\text{diag}_{i,j}=&amp; \frac{1}{2m}\left( \frac{5 \hbar^2}{\delta^2} + e^2(A_{x\ i,j}^2+A_{y\ i,j}^2)\right) + V_{i,j},
 \end{align}
 \]</span></p>
+<p>yielding the representation of the Hamiltonian operator</p>
+<p><span class="math display">\[
+\begin{align}
+[\hat{H}\Psi]_{i,j} =\ \ &amp;\ 
+(a_{1x\ i,j} \Psi_{i-2,j} + a_{1x\ i,j}^* \Psi_{i+2,j}) 
++
+(a_{1y\ i,j} \Psi_{i,j-2} + a_{1y\ i,j}^* \Psi_{i,j+2})\\
++&amp;\ 
+(a_{2x\ i,j} \Psi_{i-1,j} + a_{2x\ i,j}^* \Psi_{i+1,j})
++
+(a_{2y\ i,j} \Psi_{i,j-1} + a_{2y\ i,j}^* \Psi_{i,j+1})\\
++&amp;\ 
+\text{diag}_{i,j} \Psi_{i,j}.
+\end{align}
+\]</span></p>
+<p>Like for the harmonic oscillator, each of the four conjugate pairs (paired in brackets) can be expressed in terms of two bock diagonal operators. The diagonal element gives the nineth operator in the Suzuki-Trotter scheme. The code published with these notes implements Suzuki-Trotter-<span class="math inline">\(4\)</span>.</p>
 <p>To demonstrate the two-dimensional code, we model Young’s double-slit experiment. We start with a Gaussian wave packet moving upwards towards a screen with two slits. The wavefunction interacts with the screen and exhibits the famous interference pattern.</p>
 <figure>
 <img src='figures/Young.gif' width=100% />
